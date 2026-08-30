@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roblox Teleporter</title>
+</head>
+
+<body>
+    <h2>Roblox Teleporter</h2>
+
+    <input id="username" placeholder="Username">
+    <input id="jobId" placeholder="Job ID">
+
+    <button onclick="teleport()">TELEPORT</button>
+
+    <p id="status"></p>
+
+    <script>
+        async function teleport() {
+            const username =
+                document.getElementById("username").value.trim();
+
+            const jobId =
+                document.getElementById("jobId").value.trim();
+
+            const status =
+                document.getElementById("status");
+
+            if (!username || !jobId) {
+                status.textContent = "Enter both fields.";
+                return;
+            }
+
+            const response = await fetch("/api/teleport", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    jobId: jobId
+                })
+            });
+
+            const data = await response.json();
+
+            status.textContent =
+                data.success ? "Request sent!" : data.error;
+        }
+    </script>
+</body>
+</html>
