@@ -1,51 +1,218 @@
 <!DOCTYPE html>
+
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Roblox Teleporter</title>
+
+```
+<style>
+    body {
+        margin: 0;
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .box {
+        width: 350px;
+        background: #1b1b1b;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        margin: 7px 0;
+        border: 0;
+        border-radius: 7px;
+        background: #292929;
+        color: white;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: 0;
+        border-radius: 7px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #status {
+        margin-top: 15px;
+    }
+
+    #teleporter {
+        display: none;
+    }
+
+    #loginStatus {
+        margin-top: 15px;
+    }
+</style>
+```
+
 </head>
 
 <body>
+
+<div class="box">
+
+```
+<!-- PASSWORD SCREEN -->
+<div id="login">
+    <h2>Enter Password</h2>
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Password"
+        autocomplete="off"
+    >
+
+    <button onclick="login()">
+        LOGIN
+    </button>
+
+    <div id="loginStatus"></div>
+</div>
+
+
+<!-- TELEPORTER -->
+<div id="teleporter">
+
     <h2>Roblox Teleporter</h2>
 
-    <input id="username" placeholder="Username">
-    <input id="jobId" placeholder="Job ID">
+    <input
+        id="username"
+        placeholder="Username"
+        autocomplete="off"
+    >
 
-    <button onclick="teleport()">TELEPORT</button>
+    <input
+        id="jobId"
+        placeholder="Destination Job ID"
+        autocomplete="off"
+    >
 
-    <p id="status"></p>
+    <button onclick="teleport()">
+        TELEPORT
+    </button>
 
-    <script>
-        async function teleport() {
-            const username =
-                document.getElementById("username").value.trim();
+    <div id="status"></div>
 
-            const jobId =
-                document.getElementById("jobId").value.trim();
+</div>
+```
 
-            const status =
-                document.getElementById("status");
+</div>
 
-            if (!username || !jobId) {
-                status.textContent = "Enter both fields.";
-                return;
-            }
+<script>
 
-            const response = await fetch("/api/teleport", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    jobId: jobId
-                })
-            });
+const PASSWORD = "cats";
 
-            const data = await response.json();
 
-            status.textContent =
-                data.success ? "Request sent!" : data.error;
+function login() {
+    const password =
+        document.getElementById("password").value;
+
+    const status =
+        document.getElementById("loginStatus");
+
+    if (password === PASSWORD) {
+
+        document.getElementById("login").style.display = "none";
+        document.getElementById("teleporter").style.display = "block";
+
+    } else {
+
+        status.textContent = "Incorrect password.";
+
+    }
+}
+
+
+async function teleport() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const jobId =
+        document.getElementById("jobId").value.trim();
+
+    const status =
+        document.getElementById("status");
+
+
+    if (!username || !jobId) {
+
+        status.textContent =
+            "Enter a username and Job ID.";
+
+        return;
+    }
+
+
+    status.textContent =
+        "Finding player...";
+
+
+    try {
+
+        const response = await fetch("/api/request", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                username,
+                jobId
+            })
+
+        });
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error || "Request failed"
+            );
+
         }
-    </script>
+
+
+        status.textContent =
+            `Teleport request sent for ${data.username}!`;
+
+
+    } catch (error) {
+
+        status.textContent =
+            "Error: " + error.message;
+
+    }
+
+}
+
+</script>
+
 </body>
 </html>
