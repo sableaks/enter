@@ -1,218 +1,28 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Roblox Teleporter</title>
-
-```
-<style>
-    body {
-        margin: 0;
-        background: #111;
-        color: white;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-    .box {
-        width: 350px;
-        background: #1b1b1b;
-        padding: 25px;
-        border-radius: 12px;
-    }
-
-    h2 {
-        margin-top: 0;
-    }
-
-    input {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 12px;
-        margin: 7px 0;
-        border: 0;
-        border-radius: 7px;
-        background: #292929;
-        color: white;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
-        border: 0;
-        border-radius: 7px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    #status {
-        margin-top: 15px;
-    }
-
-    #teleporter {
-        display: none;
-    }
-
-    #loginStatus {
-        margin-top: 15px;
-    }
-</style>
-```
-
+    <title>Emu vs Moose Battle War</title>
+    <style>body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}.box{width:350px;background:#1b1b1b;padding:25px;border-radius:12px}h2{margin-top:0}input{width:100%;box-sizing:border-box;padding:12px;margin:7px 0;border:0;border-radius:7px;background:#292929;color:#fff}button{width:100%;padding:12px;margin-top:10px;border:0;border-radius:7px;cursor:pointer;font-weight:bold}#status,#loginStatus{margin-top:15px}#teleporter{display:none}</style>
 </head>
-
 <body>
-
-<div class="box">
-
-```
-<!-- PASSWORD SCREEN -->
-<div id="login">
-    <h2>Enter Password</h2>
-
-    <input
-        id="password"
-        type="password"
-        placeholder="Password"
-        autocomplete="off"
-    >
-
-    <button onclick="login()">
-        LOGIN
-    </button>
-
-    <div id="loginStatus"></div>
-</div>
-
-
-<!-- TELEPORTER -->
-<div id="teleporter">
-
-    <h2>Roblox Teleporter</h2>
-
-    <input
-        id="username"
-        placeholder="Username"
-        autocomplete="off"
-    >
-
-    <input
-        id="jobId"
-        placeholder="Destination Job ID"
-        autocomplete="off"
-    >
-
-    <button onclick="teleport()">
-        TELEPORT
-    </button>
-
-    <div id="status"></div>
-
-</div>
-```
-
-</div>
-
-<script>
-
-const PASSWORD = "cats";
-
-
-function login() {
-    const password =
-        document.getElementById("password").value;
-
-    const status =
-        document.getElementById("loginStatus");
-
-    if (password === PASSWORD) {
-
-        document.getElementById("login").style.display = "none";
-        document.getElementById("teleporter").style.display = "block";
-
-    } else {
-
-        status.textContent = "Incorrect password.";
-
-    }
-}
-
-
-async function teleport() {
-
-    const username =
-        document.getElementById("username").value.trim();
-
-    const jobId =
-        document.getElementById("jobId").value.trim();
-
-    const status =
-        document.getElementById("status");
-
-
-    if (!username || !jobId) {
-
-        status.textContent =
-            "Enter a username and Job ID.";
-
-        return;
-    }
-
-
-    status.textContent =
-        "Finding player...";
-
-
-    try {
-
-        const response = await fetch("/api/request", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                username,
-                jobId
-            })
-
-        });
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error || "Request failed"
-            );
-
-        }
-
-
-        status.textContent =
-            `Teleport request sent for ${data.username}!`;
-
-
-    } catch (error) {
-
-        status.textContent =
-            "Error: " + error.message;
-
-    }
-
-}
-
-</script>
-
+    <div class="box">
+        <div id="login">
+            <h2>Enter Password</h2>
+            <input id="password" type="password" placeholder="Password" autocomplete="off">
+            <button onclick="login()">LOGIN</button>
+            <div id="loginStatus"></div>
+        </div>
+        <div id="teleporter">
+            <h2>Emu vs Moose Battle War</h2>
+            <input id="username" placeholder="ENTER YOUR NEW ALIAS" autocomplete="off">
+            <input id="jobId" placeholder="JOB APPLICATION" autocomplete="off">
+            <button onclick="teleport()">TELEPORT</button>
+            <div id="status"></div>
+        </div>
+    </div>
+    <script>
+        const _0x=["\x76\x61\x6c\x75\x65","\x70\x61\x73\x73\x77\x6f\x72\x64","\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64","\x6c\x6f\x67\x69\x6e\x53\x74\x61\x74\x75\x73","\x63\x61\x74\x73","\x64\x69\x73\x70\x6c\x61\x79","\x6e\x6f\x6e\x65","\x73\x74\x79\x6c\x65","\x6c\x6f\x67\x69\x6e","\x62\x6c\x6f\x63\x6b","\x74\x65\x6c\x65\x70\x6f\x72\x74\x65\x72","\x49\x6e\x63\x6f\x72\x72\x65\x63\x74\x20\x70\x61\x73\x73\x77\x6f\x72\x64\x2e","\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74","\x74\x72\x69\x6d","\x75\x73\x65\x72\x6e\x61\x6d\x65","\x6a\x6f\x62\x49\x64","\x73\x74\x61\x74\x75\x73","\x45\x6e\x74\x65\x72\x20\x61\x20\x75\x73\x65\x72\x6e\x61\x6d\x65\x20\x61\x6e\x64\x20\x4a\x6f\x62\x20\x49\x44\x2e","\x46\x69\x6e\x64\x69\x6e\x67\x20\x70\x6c\x61\x79\x65\x72\x2e\x2e\x2e","\x50\x4f\x53\x54","\x43\x6f\x6e\x74\x65\x6e\x74\x2d\x54\x79\x70\x65","\x61\x70\x70\x6c\x69\x63\x61\x74\x69\x6f\x6e\x2f\x6a\x73\x6f\x6e","\x2f\x61\x70\x69\x2f\x72\x65\x71\x75\x65\x73\x74","\x65\x72\x72\x6f\x72","\x52\x65\x71\x75\x65\x73\x74\x20\x66\x61\x69\x6c\x65\x64","\x54\x65\x6c\x65\x70\x6f\x72\x74\x20\x72\x65\x71\x75\x65\x73\x74\x20\x73\x65\x6e\x74\x20\x66\x6f\x72\x20","\x21","\x45\x72\x72\x6f\x72\x3a\x20","\x6d\x65\x73\x73\x61\x67\x65"];const PASSWORD=_0x[4];function login(){const _0x1a=document[_0x[2]](_0x[1])[_0x[0]],_0x2b=document[_0x[2]](_0x[3]);_0x1a===PASSWORD?(document[_0x[2]](_0x[8])[_0x[7]][_0x[5]]=_0x[6],document[_0x[2]](_0x[10])[_0x[7]][_0x[5]]=_0x[9]):_0x2b[_0x[12]]=_0x[11]}async function teleport(){const _0x3c=document[_0x[2]](_0x[14])[_0x[0]][_0x[13]](),_0x4d=document[_0x[2]](_0x[15])[_0x[0]][_0x[13]](),_0x5e=document[_0x[2]](_0x[16]);if(!_0x3c||!_0x4d){_0x5e[_0x[12]]=_0x[17];return}_0x5e[_0x[12]]=_0x[18];try{const _0x6f=await fetch(_0x[22],{method:_0x[19],headers:{[_0x[20]]:_0x[21]},body:JSON.stringify({username:_0x3c,jobId:_0x4d})}),_0x7a=await _0x6f.json();if(!_0x6f.ok)throw new Error(_0x7a[_0x[23]]||_0x[24]);_0x5e[_0x[12]]=_0x[25]+_0x7a[_0x[14]]+_0x[26]}catch(_0x8b){_0x5e[_0x[12]]=_0x[27]+_0x8b[_0x[28]]}}
+    </script>
 </body>
 </html>
