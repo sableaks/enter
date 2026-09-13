@@ -2,27 +2,73 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>EMU</title>
-    <style>body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}.box{width:350px;background:#1b1b1b;padding:25px;border-radius:12px}h2{margin-top:0}input{width:100%;box-sizing:border-box;padding:12px;margin:7px 0;border:0;border-radius:7px;background:#292929;color:#fff}button{width:100%;padding:12px;margin-top:10px;border:0;border-radius:7px;cursor:pointer;font-weight:bold}#status,#loginStatus{margin-top:15px}#teleporter{display:none}</style>
+    <title>Roblox Teleporter</title>
+    <style>body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}.box{width:350px;background:#1b1b1b;padding:25px;border-radius:12px}h2{margin-top:0}input{width:100%;box-sizing:border-box;padding:12px;margin:7px 0;border:0;border-radius:7px;background:#292929;color:#fff}button{width:100%;padding:12px;margin-top:10px;border:0;border-radius:7px;cursor:pointer;font-weight:bold}#status,#loginStatus{margin-top:15px}</style>
 </head>
 <body>
-    <div class="box">
+    <div class="box" id="app">
         <div id="login">
             <h2>Enter Password</h2>
             <input id="password" type="password" placeholder="Password" autocomplete="off">
             <button onclick="login()">LOGIN</button>
             <div id="loginStatus"></div>
         </div>
-        <div id="teleporter">
-            <h2>EMU</h2>
-            <input id="username" placeholder="Username" autocomplete="off">
-            <input id="jobId" placeholder="Destination Job ID" autocomplete="off">
-            <button onclick="teleport()">TELEPORT</button>
-            <div id="status"></div>
-        </div>
     </div>
     <script>
-        async function login(){const e=document.getElementById("password").value,t=document.getElementById("loginStatus");try{const n=await fetch("/api/check",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:e})}),s=await n.json();s.success?(document.getElementById("login").style.display="none",document.getElementById("teleporter").style.display="block"):t.textContent="Incorrect password."}catch(e){t.textContent="Error."}}async function teleport(){const e=document.getElementById("username").value.trim(),t=document.getElementById("jobId").value.trim(),n=document.getElementById("status");if(!e||!t)return void(n.textContent="Enter a username and Job ID.");n.textContent="Finding player...";try{const s=await fetch("/api/request",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:e,jobId:t})}),o=await s.json();if(!s.ok)throw new Error(o.error||"Request failed");n.textContent=`Teleport request sent for ${o.username}!`}catch(e){n.textContent="Error: "+e.message}}
+        async function login() {
+            const p = document.getElementById("password").value;
+            const status = document.getElementById("loginStatus");
+            try {
+                const res = await fetch("/api/check", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password: p })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // Dynamically inject the teleporter HTML only *after* correct password
+                    document.getElementById("app").innerHTML = `
+                        <h2>Roblox Teleporter</h2>
+                        <input id="username" placeholder="Username" autocomplete="off">
+                        <input id="jobId" placeholder="Destination Job ID" autocomplete="off">
+                        <button onclick="teleport()">TELEPORT</button>
+                        <div id="status"></div>
+                    `;
+                } else {
+                    status.textContent = "Incorrect password.";
+                }
+            } catch (err) {
+                status.textContent = "Error connecting to server.";
+            }
+        }
+
+        async function teleport() {
+            const username = document.getElementById("username").value.trim();
+            const jobId = document.getElementById("jobId").value.trim();
+            const status = document.getElementById("status");
+
+            if (!username || !jobId) {
+                status.textContent = "Enter a username and Job ID.";
+                return;
+            }
+
+            status.textContent = "Finding player...";
+
+            try {
+                const response = await fetch("/api/request", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, jobId })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Request failed");
+
+                status.textContent = `Teleport request sent for ${data.username}!`;
+            } catch (error) {
+                status.textContent = "Error: " + error.message;
+            }
+        }
     </script>
 </body>
 </html>
