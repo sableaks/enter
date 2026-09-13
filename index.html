@@ -2,17 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Roblox Teleporter</title>
+    <title>Login</title>
     <style>body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh}.box{width:350px;background:#1b1b1b;padding:25px;border-radius:12px}h2{margin-top:0}input{width:100%;box-sizing:border-box;padding:12px;margin:7px 0;border:0;border-radius:7px;background:#292929;color:#fff}button{width:100%;padding:12px;margin-top:10px;border:0;border-radius:7px;cursor:pointer;font-weight:bold}#status,#loginStatus{margin-top:15px}</style>
 </head>
 <body>
     <div class="box" id="app">
-        <div id="login">
-            <h2>Enter Password</h2>
-            <input id="password" type="password" placeholder="Password" autocomplete="off">
-            <button onclick="login()">LOGIN</button>
-            <div id="loginStatus"></div>
-        </div>
+        <h2>Enter Password</h2>
+        <input id="password" type="password" placeholder="Password" autocomplete="off">
+        <button onclick="login()">LOGIN</button>
+        <div id="loginStatus"></div>
     </div>
     <script>
         async function login() {
@@ -24,49 +22,22 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ password: p })
                 });
+                
                 const data = await res.json();
+                
                 if (data.success) {
-                    // Dynamically inject the teleporter HTML only *after* correct password
-                    document.getElementById("app").innerHTML = `
-                        <h2>Roblox Teleporter</h2>
-                        <input id="username" placeholder="Username" autocomplete="off">
-                        <input id="jobId" placeholder="Destination Job ID" autocomplete="off">
-                        <button onclick="teleport()">TELEPORT</button>
-                        <div id="status"></div>
-                    `;
+                    // Inject the protected HTML UI
+                    document.getElementById("app").innerHTML = data.html;
+                    
+                    // Inject and execute the protected JavaScript logic
+                    const script = document.createElement("script");
+                    script.innerHTML = data.js;
+                    document.body.appendChild(script);
                 } else {
                     status.textContent = "Incorrect password.";
                 }
             } catch (err) {
                 status.textContent = "Error connecting to server.";
-            }
-        }
-
-        async function teleport() {
-            const username = document.getElementById("username").value.trim();
-            const jobId = document.getElementById("jobId").value.trim();
-            const status = document.getElementById("status");
-
-            if (!username || !jobId) {
-                status.textContent = "Enter a username and Job ID.";
-                return;
-            }
-
-            status.textContent = "Finding player...";
-
-            try {
-                const response = await fetch("/api/request", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, jobId })
-                });
-
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || "Request failed");
-
-                status.textContent = `Teleport request sent for ${data.username}!`;
-            } catch (error) {
-                status.textContent = "Error: " + error.message;
             }
         }
     </script>
